@@ -1,7 +1,9 @@
-import { Image, ImageKitProvider } from "@imagekit/next"
+
+
+
+import { Image } from "@imagekit/next"
 import type { ImageProps as NextImageProps } from "next/image";
 import type { IKImageProps, Transformation } from "@imagekit/next";
-import ImageKit from "./components/ImageKit";
 
 /**
  * Remove `src` from Next.js props
@@ -27,14 +29,20 @@ export interface ImageKitImageProps extends NextImagePropsWithoutSrc {
 
   /** Where transformations appear in the URL */
   transformationPosition?: "query" | "path";
+
 }
 
 
-const Homepage = () => {
-   return (<>
-   Homepage
- </> )
+const ImageKit = (props:IKImageProps) => {
+    const imageKitURL = process.env.IMAGE_KIT_URL_ENDPOINT
+   return (
+   
+    // eslint-disable-next-line jsx-a11y/alt-text
+    <Image urlEndpoint={imageKitURL} transformation={[{ width: 600, height: 600  }]} {...props} />
+ 
+
+  )
 }
 
 
-export default Homepage
+export default ImageKit

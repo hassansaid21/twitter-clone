@@ -1,5 +1,6 @@
-import Image from "next/image";
+
 import Link from "next/link";
+import ImageKit from "./ImageKit";
 
 const menuList = [
   {
@@ -68,16 +69,16 @@ const menuList = [
 export default function LeftBar() {
   return (
     <nav aria-label="primary" className="flex  sticky top-0 h-screen flex-col justify-between   py-2">
-       <div className="flex flex-col gap-1.5  text-md items-center xxl:items-start ">
+       <div className="flex flex-col gap-2  text-md items-center xxl:items-start ">
            <Link className="p-3 rounded-full  hover:bg-[#181818]" href='/' aria-label="Go to homepage">
-              <Image src='icons/logo.svg'  alt="X" width={24} height={24}/>
+              <ImageKit src='icons/logo.svg'  alt="X" width={24} height={24}/>
            </Link>
-           <ul className="flex flex-col gap-1 " role="list">
+           <ul className="flex flex-col gap-2 " role="list">
                 {menuList.map((item)=>(
                   <li key={item.id}>
 
-                   <Link aria-label={item.name} className="flex items-center gap-4 p-3 rounded-full hover:bg-[#181818] "  href={item.link}>
-                      <Image src={`icons/${item.icon}`} width={24} height={24}  alt='' aria-hidden="true" />
+                   <Link aria-label={item.name} className="flex items-center gap-4 p-2 rounded-full hover:bg-[#181818] "  href={item.link}>
+                      <ImageKit src={`icons/${item.icon}`} width={24} height={24}  alt='' aria-hidden="true" />
                       <span className="hidden xxl:inline">{item.name}</span>
                   </Link>
                   </li>
@@ -87,7 +88,7 @@ export default function LeftBar() {
            </ul>
         
         <Link className="bg-white rounded-full  p-2  xxl:hidden  " href='/'>
-        <Image src='icons/post.svg' alt="post-icon" width={24} height={24}/>
+        <ImageKit src='icons/post.svg' alt="post-icon" width={24} height={24}/>
         </Link>
         <Link href='/' className="hidden xxl:inline bg-white text-lg font-bold rounded-full py-2 px-20  text-black text-center" >
           Post</Link>
@@ -97,7 +98,7 @@ export default function LeftBar() {
         <div aria-haspopup="menu"  className="flex items-center p-2  justify-between cursor-pointer hover:bg-[#181818] rounded-full " role="button" aria-label="Open profile menu">
              <div className="flex items-center  gap-2">
               <div className="relative w-10 h-10 rounded-full overflow-hidden ">
-                <Image src='/general/me.png' alt="user-logo" fill/>
+                <ImageKit src='/general/me.png' alt="user-logo" fill/>
               </div>
               <div className="hidden xxl:flex flex-col   text-sm ">
                 <span className="font-bold">Hassan Said</span>
