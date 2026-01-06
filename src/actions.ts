@@ -1,6 +1,5 @@
-'use server'
+"use server";
 import ImageKit, { toFile } from "@imagekit/nodejs";
-
 
 //  import { getUploadAuthParams } from "@imagekit/next/server"
 // const { token, expire, signature } = getUploadAuthParams({
@@ -10,40 +9,41 @@ import ImageKit, { toFile } from "@imagekit/nodejs";
 //     // token: "random-token", // Optional, a unique token for request
 // })
 
-
-
-
 export const sharePost = async (formData: FormData) => {
-    const imagekit = new ImageKit();
-  const file = formData.get("media") as File | null;
+  const client = new ImageKit();
   // const desc = formData.get("desc") as string | null;
+  const files = formData.getAll("media") as File[];
 
-  if (!file) {
-    throw new Error("No file provided");
+  if (files.length > 4) {
+    throw new Error("Maximum 4 images allowed");
   }
 
-  // Browser File → Buffer
-  const buffer = Buffer.from(await file.arrayBuffer());
-
-  // Buffer → ImageKit file
-  const ikFile = await toFile(buffer, file.name);
-
-  try {
-    await imagekit.files.upload({
-      file: ikFile,
-      fileName: file.name,
-      folder: "/twitter/posts/",
-      transformation: {
-        pre: "w-600",
-      },
-    });
-
-    
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(`Image upload failed: ${error.message}`);
+  for (const file of files) {
+    // validate size/type
+    if (!file.type.startsWith("image/")) {
+      throw new Error("Invalid file type");
     }
-    throw new Error("Unknown error occurred during file upload");
+  }
+
+  if (files.length > 0) {
+    try {
+      await Promise.all(
+        files.map(async (file) => {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const ikFile = await toFile(buffer, file.name);
+
+          return client.files.upload({
+            file: ikFile,
+            fileName: file.name,
+            folder: "/twitter/posts/",
+          });
+        })
+      );
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Image upload failed: ${error.message}`);
+      }
+      throw new Error("Unknown error occurred during file upload");
+    }
   }
 };
-
