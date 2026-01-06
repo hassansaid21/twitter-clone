@@ -16,7 +16,7 @@ export default function Share() {
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
-    textarea.style.height = "auto"; //this is important to allow textarea to shrink on deleteting
+    textarea.style.height = "auto";  //this is important to allow textarea to shrink on deleteting
     textarea.style.height = textarea.scrollHeight + "px"; // to give the height that is needed in order to make the content fit without scrolling
   }, [text]);
 
