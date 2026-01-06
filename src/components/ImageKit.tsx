@@ -1,4 +1,4 @@
-
+'use client'
 
 
 import { Image } from "@imagekit/next"
@@ -34,7 +34,14 @@ export interface ImageKitImageProps extends NextImagePropsWithoutSrc {
 
 
 const ImageKit = (props:IKImageProps) => {
-    const imageKitURL = process.env.IMAGE_KIT_URL_ENDPOINT
+  const imageKitURL =
+  props.urlEndpoint ??
+  process.env.NEXT_PUBLIC_IMAGE_KIT_URL_ENDPOINT;
+ 
+
+if (!imageKitURL) {
+  throw new Error("ImageKit urlEndpoint is missing");
+}
    return (
    
     // eslint-disable-next-line jsx-a11y/alt-text

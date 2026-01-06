@@ -70,14 +70,14 @@ export default function LeftBar() {
   return (
     <nav aria-label="primary" className="flex  sticky top-0 h-screen flex-col justify-between   py-2">
        <div className="flex flex-col gap-2  text-md items-center xxl:items-start ">
-           <Link className="p-3 rounded-full  hover:bg-[#181818]" href='/' aria-label="Go to homepage">
+           <Link className="p-3 rounded-full  hover:bg-bgHover" href='/' aria-label="Go to homepage">
               <ImageKit src='icons/logo.svg'  alt="X" width={24} height={24}/>
            </Link>
            <ul className="flex flex-col gap-2 " role="list">
                 {menuList.map((item)=>(
                   <li key={item.id}>
 
-                   <Link aria-label={item.name} className="flex items-center gap-4 p-2 rounded-full hover:bg-[#181818] "  href={item.link}>
+                   <Link aria-label={item.name} className="flex items-center gap-4 p-2 rounded-full hover:bg-bgHover "  href={item.link}>
                       <ImageKit src={`icons/${item.icon}`} width={24} height={24}  alt='' aria-hidden="true" />
                       <span className="hidden xxl:inline">{item.name}</span>
                   </Link>
@@ -95,7 +95,7 @@ export default function LeftBar() {
         </div>
         
         
-        <div aria-haspopup="menu"  className="flex items-center p-2  justify-between cursor-pointer hover:bg-[#181818] rounded-full " role="button" aria-label="Open profile menu">
+        <div aria-haspopup="menu"  className="flex items-center p-2  justify-between cursor-pointer hover:bg-bgHover rounded-full " role="button" aria-label="Open profile menu">
              <div className="flex items-center  gap-2">
               <div className="relative w-10 h-10 rounded-full overflow-hidden ">
                 <ImageKit src='/general/me.png' alt="user-logo" fill/>

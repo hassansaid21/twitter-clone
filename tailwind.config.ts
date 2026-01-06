@@ -24,6 +24,7 @@ export default {
         iconBlue: "#1d9bf0",
         iconGreen: "#00ba7c",
         iconPink: "#f91880",
+        bgHover: "#181818",
       },
     },
   },

@@ -5,6 +5,8 @@ export default function Feed() {
   return (
     <div>
         <Post />
-    </div>
+        <Post />
+        <Post />
+        </div>
   )
 }
