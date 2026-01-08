@@ -2,8 +2,19 @@ import ImageKit from "./ImageKit";
 import PostInfo from "./PostInfo";
 import PostInteractions from "./PostInteractions";
 import Avatar from "./Avatar";
+import {ImageKit as Client} from '@imagekit/nodejs';
 
-export default function Post() {
+const client = new Client({
+    privateKey: "your_private_api_key"
+});
+
+try {
+  const result = await client.files.get("file_id");
+  console.log(result);
+} catch (error) {
+  console.log(error);
+}
+export default  async function  Post() {
   return (
     <div className="p-4 border-b-[1px] border-borderGray">
       {/** post type */}
