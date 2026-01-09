@@ -8,7 +8,8 @@ export interface MediaFile {
   id: string;
   file: File;
   url: string;
-  settings:Settings
+  settings:Settings ;
+  type:'video'|'image' ;
 }
 
 export interface PostImagesProps {
@@ -32,4 +33,15 @@ interface ImageEditorProps {
     type?: "original" | "wide" | "square";
     sensitive?: boolean;
   }) => void;
+}
+
+
+export interface FileDetails {
+  width : number ; 
+  height : number ;
+  filePath : string ;
+  url : string ;
+  fileType :  string ;
+  customMetadata ?: {sensitive : boolean}
+  mime:'string'
 }

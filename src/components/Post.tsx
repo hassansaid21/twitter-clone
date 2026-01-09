@@ -1,20 +1,26 @@
-import ImageKit from "./ImageKit";
 import PostInfo from "./PostInfo";
 import PostInteractions from "./PostInteractions";
 import Avatar from "./Avatar";
-import {ImageKit as Client} from '@imagekit/nodejs';
-
+import { ImageKit as Client } from "@imagekit/nodejs";
+import { FileDetails } from "@/types";
+import PostMedia from "./PostMedia";
 const client = new Client({
-    privateKey: "your_private_api_key"
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
 });
 
-try {
-  const result = await client.files.get("file_id");
-  console.log(result);
-} catch (error) {
-  console.log(error);
-}
-export default  async function  Post() {
+export default async function Post() {
+  async function getFileDetails(fileId: string): Promise<FileDetails> {
+    try {
+      return (await client.files.get(fileId)) as FileDetails;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Getting  File Details  failed: ${error.message}`);
+      }
+      throw new Error("Failed to fetch file details");
+    }
+  }
+  const fileDetails = await getFileDetails("696151085c7cd75eb8261bf6");
+  // console.log(fileDetails)
   return (
     <div className="p-4 border-b-[1px] border-borderGray">
       {/** post type */}
@@ -33,7 +39,7 @@ export default  async function  Post() {
         <span className=""> hassan said reposted</span>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-2 md:gap-4">
         {/** avatar */}
 
         <Avatar />
@@ -57,15 +63,7 @@ export default  async function  Post() {
             consequatur deleniti expedita omnis.
           </p>
 
-          <div className="rounded-md border border-borderGray overflow-hidden">
-            <ImageKit
-              src="general/post.jpeg"
-              alt="post image"
-              width={600}
-              height={600}
-              transformation={[{ width: 600, height: 600 }]}
-            />
-          </div>
+          {fileDetails && <PostMedia fileDetails={fileDetails} />}
           <PostInteractions />
         </div>
       </div>

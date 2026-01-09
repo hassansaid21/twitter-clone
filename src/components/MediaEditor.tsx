@@ -24,11 +24,11 @@ export default function ImageEditor({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/75 z-10 flex items-center justify-center">
-      <div className="bg-black rounded-xl flex flex-col gap-8 p-12">
+    <div className="fixed inset-0 bg-[#242D34]/50 z-10 flex items-center justify-center ">
+      <div className="bg-black w-[90vw] h-[90vh] md:w-auto rounded-xl flex  flex-col gap-8 p-12 ">
 
         {/* Header */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center ">
             
           <button onClick={onClose} className="px-2 py-1 rounded-full hover:bg-bgHover  ">←</button>
           <h2 className="font-bold text-lg">Media Settings</h2>
@@ -42,12 +42,11 @@ export default function ImageEditor({
         </div>
 
         {/* Image Preview */}
-        <div className="w-[600px] h-[500px] rounded-lg overflow-hidden flex items-center justify-center">
+      { media.type==='image'&&  <div className=" relative w-full md:w-[600px] h-[500px] rounded-lg overflow-hidden flex items-center justify-center">
           <Image
             src={media.url}
             alt=""
-            width={600}
-            height={600}
+            fill
             className={
               draftSettings.type === "original"
                 ? "h-full object-contain"
@@ -56,11 +55,30 @@ export default function ImageEditor({
                 : "aspect-video object-cover"
             }
           />
+        </div>}
+
+        {/* video preview */}
+        {media.type === "video" && (
+          <div className=" relative w-full md:w-[600px] h-[500px] rounded-lg overflow-hidden flex items-center justify-center">
+        <video
+          src={media.url}
+          className={
+            draftSettings.type === "original"
+              ? "h-full object-contain"
+              : draftSettings.type === "square"
+              ? "aspect-square object-cover"
+              : "aspect-video object-cover"
+          }
+          controls
+          muted
+        />
         </div>
+      )}
+
 
         {/* Controls */}
-        <div className="flex justify-between text-sm">
-          <div className="flex gap-6">
+        <div className="flex justify-center gap-8 text-sm">
+          {media.type==='image'&&<div className="flex gap-6">
             {(["original", "wide", "square"] as const).map((type) => (
               <button
               type="button"
@@ -78,7 +96,7 @@ export default function ImageEditor({
                 {type}
               </button>
             ))}
-          </div>
+          </div>}
 
           <button
           type="button"

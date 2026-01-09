@@ -1,6 +1,6 @@
-import Share from "../components/Share";
 import Feed from "../components/Feed";
 import Link from "next/link";
+import Publish from "../components/Publish";
 
 const Homepage = () => {
   return (
@@ -33,7 +33,7 @@ const Homepage = () => {
           <span className=" py-4 px-1 "> CSS</span>
         </Link>
       </div>
-      <Share />
+      <Publish />
       <Feed />
     </div>
   );

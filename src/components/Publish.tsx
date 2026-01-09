@@ -2,16 +2,20 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Avatar from "./Avatar";
-import ImageKit from "./ImageKit";
+import ImageKitMedia from "./ImageKitMedia";
 import { sharePost } from "@/actions";
-import PostImages from "./PostImages";
-// import { MediaFile, Settings } from "@/types";
-import ImageEditor from "./ImageEditor";
+import MediaEditor from "./MediaEditor";
 import { useMediaEditor } from "@/hooks/useMediaEditor";
-
-
-export default function Share() {
+import PublishMedia from "./PublishMedia";
+import EmojiPicker, {
+  EmojiClickData,
+  EmojiStyle,
+  Theme,
+} from "emoji-picker-react";
+export default function Publish() {
   const [text, setText] = useState("");
+  const [openPicker, setOpenPicker] = useState(false);
+
   const {
     media,
     editingMedia,
@@ -20,21 +24,17 @@ export default function Share() {
     editMedia,
     updateMediaSettings,
     closeEditor,
-    setMedia ,
+    reset,
   } = useMediaEditor(4);
-
+  //console.log(media)
   const MAX_CHARS = 280;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
     textarea.style.height = "auto"; //this is important to allow textarea to shrink on deleteting
     textarea.style.height = textarea.scrollHeight + "px"; // to give the height that is needed in order to make the content fit without scrolling
   }, [text]);
-
- 
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // prevent default form submission
@@ -44,15 +44,19 @@ export default function Share() {
       formData.append("media", m.file); // send all selected files
     });
 
-    await sharePost(formData , media); // Server Action
+    const fileDetials = await sharePost(formData, media); // Server Action
+    console.log(fileDetials);
     setText(""); // reset states
-    setMedia([]);
+    reset();
   };
 
+  function handleEmoji(e: EmojiClickData) {
+    setText((v) => v + e.emoji);
+  }
   return (
     <form
       onSubmit={handleSubmit}
-      className="border border-borderGray flex p-4 gap-4"
+      className="border-b-[1px] border-borderGray flex p-4 gap-4"
     >
       <Avatar />
 
@@ -72,21 +76,24 @@ export default function Share() {
               text-[18px]
             "
         />
-
+        {/* preview image or ideoURL */}
         {media.length > 0 && (
-          <PostImages  media={media} onRemove={removeMedia} onEdit={editMedia} />
+          <PublishMedia
+            media={media}
+            onRemove={removeMedia}
+            onEdit={editMedia}
+          />
         )}
 
-{editingMedia && (
-  <ImageEditor
-    media={editingMedia}
-    onClose={closeEditor}
-    onSave={(settings) =>
-      updateMediaSettings(editingMedia.id, settings)
-    }
-  />
-)}
-
+        {editingMedia && (
+          <MediaEditor
+            media={editingMedia}
+            onClose={closeEditor}
+            onSave={(settings) =>
+              updateMediaSettings(editingMedia.id, settings)
+            }
+          />
+        )}
 
         <hr className="border-borderGray" />
         <div className="flex justify-between">
@@ -95,9 +102,9 @@ export default function Share() {
               <input
                 hidden
                 type="file"
-                accept="image/*"
+                accept="image/*,video/*"
                 id="image-input"
-                multiple // to make the browser send multiple files 
+                multiple // to make the browser send multiple files
                 onChange={(e) => addMedia(e.target.files)}
               />
             )}
@@ -107,7 +114,8 @@ export default function Share() {
                 media.length === 4 ? "opacity-40 pointer-events-none" : ""
               } p-2 text-center rounded-full hover:bg-blue-500/20 `}
             >
-              <ImageKit
+              <ImageKitMedia
+                type="image"
                 src="icons/image.svg"
                 alt=""
                 width={20}
@@ -115,35 +123,72 @@ export default function Share() {
                 className="cursor-pointer"
               />
             </label>
-            <ImageKit
+            <ImageKitMedia
+              type="image"
               src="icons/gif.svg"
               alt=""
               className="cursor-pointer"
               width={20}
               height={20}
             />{" "}
-            <ImageKit
+            <ImageKitMedia
+              type="image"
               src="icons/poll.svg"
               alt=""
               className="cursor-pointer"
               width={20}
               height={20}
             />{" "}
-            <ImageKit
-              src="icons/emoji.svg"
-              alt=""
-              className="cursor-pointer"
-              width={20}
-              height={20}
-            />{" "}
-            <ImageKit
+            <div className="relative">
+              {/* Trigger */}
+              <button
+                type="button"
+                aria-label="Open emoji picker"
+                onClick={() => setOpenPicker((v) => !v)}
+                className="rounded-full p-2 hover:bg-blue-500/20"
+              >
+                <ImageKitMedia
+                  type="image"
+                  src="icons/emoji.svg"
+                  alt="emoji icon"
+                  width={20}
+                  height={20}
+                />
+              </button>
+
+              {/* Picker */}
+              <div
+              className={`absolute top-full left-[50%] translate-x-[-50%] mb-2 z-20 ${
+                  openPicker ? "block" : "hidden"
+                }`}
+              >
+                <EmojiPicker
+                  onEmojiClick={handleEmoji}
+                  lazyLoadEmojis={true}
+                  emojiStyle={EmojiStyle.TWITTER}
+                  theme={Theme.DARK}
+                  
+                />
+              </div>
+
+              {/* Click outside */}
+              {openPicker && (
+                <div
+                  className="fixed inset-0 z-10 bg-transparent"
+                  onClick={() => setOpenPicker(false)}
+                />
+              )}
+            </div>
+            <ImageKitMedia
+              type="image"
               src="icons/schedule.svg"
               alt=""
               className="cursor-pointer"
               width={20}
               height={20}
             />{" "}
-            <ImageKit
+            <ImageKitMedia
+              type="image"
               src="icons/location.svg"
               alt=""
               className="cursor-pointer"
@@ -153,11 +198,12 @@ export default function Share() {
           </div>
 
           <button
-          type="submit"
+            type="submit"
             disabled={!text.trim() && media.length === 0}
             className="bg-white rounded-full font-bold text-black py-2 px-4 disabled:opacity-50
-                    disabled:cursor-not-allowed">                           
-                  Post
+                    disabled:cursor-not-allowed"
+          >
+            Post
           </button>
         </div>
       </div>

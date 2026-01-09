@@ -19,20 +19,21 @@ export const sharePost = async (formData: FormData, media: MediaFile[]) => {
     throw new Error("Maximum 4 images allowed");
   }
 
-  for (const file of files) {
-    // validate size/type
-    if (!file.type.startsWith("image/")) {
-      throw new Error("Invalid file type");
-    }
-  }
+  // for (let i=0 ; i<files.length ; i++) {
+  //   // validate size/type
+  //   console.log(media[i].type)
+  //   if (media[i].type!== 'video'||media[i].type!=='image') {
+  //     throw new Error("Invalid file type");
+  //   }
+  // }
 
   if (files.length > 0) {
     try {
-      await Promise.all(
+      const uploadedFiles=  await Promise.all(
         files.map(async (file, index) => {
           const buffer = Buffer.from(await file.arrayBuffer());
           const ikFile = await toFile(buffer, file.name);
-          const transformation = `w-600 ${
+          const transformation = `w-600 q-20 bl-20  ${
             media[index].settings.type === "square"
               ? "ar-1-1"
               : media[index].settings.type === "wide"
@@ -43,15 +44,30 @@ export const sharePost = async (formData: FormData, media: MediaFile[]) => {
             file: ikFile,
             fileName: file.name,
             folder: "/twitter/posts/",
-            transformation:{
-              pre:transformation,
+            ...(media[index].type==='image'&& {
+               transformation: {
+              pre: transformation,
+           } }),
+            customMetadata: {
+              sensitive: media[index].settings.sensitive,
             },
-            customMetadata:{
-              sensitive : media[index].settings.sensitive
-            }
           });
         })
       );
+     
+      return {
+        success: true,
+        media: uploadedFiles.map((file) => ({
+          fileId: file.fileId,
+          url: file.url,
+          width: file.width,
+          height: file.height,
+          sensitive: file.customMetadata?.sensitive ?? false,
+        })),
+      };
+    
+
+
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Image upload failed: ${error.message}`);

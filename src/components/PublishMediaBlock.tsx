@@ -1,4 +1,4 @@
-import { ImageBlockProps } from "@/types";
+import { MediaFile } from "@/types";
 import Image from "next/image";
 import { memo, useCallback } from "react";
 
@@ -8,7 +8,17 @@ const IMAGE_FIT_CLASS = {
   wide: "object-cover",
 } as const;
 
-function ImageBlock({ media, onRemove, onEdit }: ImageBlockProps) {
+interface PublishMediaBlockProps {
+  media: MediaFile;
+  onRemove: (id: string) => void;
+  onEdit: (media: MediaFile) => void;
+}
+
+function PublishMediaBlock({
+  media,
+  onRemove,
+  onEdit,
+}: PublishMediaBlockProps) {
   const handleEdit = useCallback(() => {
     onEdit(media);
   }, [media, onEdit]);
@@ -19,16 +29,30 @@ function ImageBlock({ media, onRemove, onEdit }: ImageBlockProps) {
 
   return (
     <div className="relative w-full h-full rounded-md overflow-hidden bg-stone-950/70">
-      <Image
-        fill
-        src={media.url}
-        alt={media.file.name}
-        className={IMAGE_FIT_CLASS[media.settings.type]}
-        sizes="(max-width: 768px) 100vw, 50vw"
-        priority={false}
-      />
+      {/* -------- IMAGE -------- */}
+      {media.type === "image" && (
+        <Image
+          fill
+          src={media.url}
+          alt={media.file.name}
+          className={IMAGE_FIT_CLASS[media.settings.type]}
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority={false}
+        />
+      )}
 
-      <button
+      {/* -------- VIDEO -------- */}
+      {media.type === "video" && (
+        <video
+          src={media.url}
+          className="w-full h-full object-cover"
+          controls
+          muted
+        />
+      )}
+
+      {/* -------- CONTROLS -------- */}
+     <button
         type="button"
         onClick={handleEdit}
         className="absolute top-2 left-2 rounded-full bg-black/60 px-4 py-2 text-sm font-bold text-white
@@ -40,7 +64,7 @@ function ImageBlock({ media, onRemove, onEdit }: ImageBlockProps) {
       <button
         type="button"
         onClick={handleRemove}
-        aria-label="Remove image"
+        aria-label="Remove media"
         className="absolute top-2 right-2 rounded-full bg-black/60 px-3 py-2 text-sm font-bold text-white
                    hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400"
       >
@@ -50,4 +74,4 @@ function ImageBlock({ media, onRemove, onEdit }: ImageBlockProps) {
   );
 }
 
-export default memo(ImageBlock);
+export default memo(PublishMediaBlock);
