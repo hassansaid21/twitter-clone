@@ -2,14 +2,6 @@
 import ImageKit, { toFile } from "@imagekit/nodejs";
 import { MediaFile } from "./types";
 
-//  import { getUploadAuthParams } from "@imagekit/next/server"
-// const { token, expire, signature } = getUploadAuthParams({
-//     privateKey: process.env.IMAGEKIT_PRIVATE_KEY as string, // Never expose this on client side
-//     publicKey: process.env.IMAGEKIT_PUBLIC_KEY as string,
-//     // expire: 30 * 60, // Optional, controls the expiry time of the token in seconds, maximum 1 hour in the future
-//     // token: "random-token", // Optional, a unique token for request
-// })
-
 export const sharePost = async (formData: FormData, media: MediaFile[]) => {
   const client = new ImageKit();
   // const desc = formData.get("desc") as string | null;
@@ -29,7 +21,7 @@ export const sharePost = async (formData: FormData, media: MediaFile[]) => {
 
   if (files.length > 0) {
     try {
-      const uploadedFiles=  await Promise.all(
+      const uploadedFiles = await Promise.all(
         files.map(async (file, index) => {
           const buffer = Buffer.from(await file.arrayBuffer());
           const ikFile = await toFile(buffer, file.name);
@@ -44,17 +36,18 @@ export const sharePost = async (formData: FormData, media: MediaFile[]) => {
             file: ikFile,
             fileName: file.name,
             folder: "/twitter/posts/",
-            ...(media[index].type==='image'&& {
-               transformation: {
-              pre: transformation,
-           } }),
+            ...(media[index].type === "image" && {
+              transformation: {
+                pre: transformation,
+              },
+            }),
             customMetadata: {
               sensitive: media[index].settings.sensitive,
             },
           });
         })
       );
-     
+
       return {
         success: true,
         media: uploadedFiles.map((file) => ({
@@ -65,9 +58,6 @@ export const sharePost = async (formData: FormData, media: MediaFile[]) => {
           sensitive: file.customMetadata?.sensitive ?? false,
         })),
       };
-    
-
-
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Image upload failed: ${error.message}`);

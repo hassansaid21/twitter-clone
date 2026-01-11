@@ -50,8 +50,8 @@ export default async function Post() {
               <h2 className="text-white text-md font-bold cursor-pointer">
                 Karim Said
               </h2>
-              <span>@karim13 &apos;</span>
-              <span>25/12/2026</span>
+              <span>@karim13 </span>
+              <span>• 25/12/2026</span>
             </div>
             <PostInfo />
           </div>

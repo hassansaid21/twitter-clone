@@ -90,7 +90,7 @@ export default function LeftBar() {
         <Link className="bg-white rounded-full  p-2  xxl:hidden  " href='/'>
         <ImageKitMedia type='image' src='icons/post.svg' alt="post-icon" width={24} height={24}/>
         </Link>
-        <Link href='/' className="hidden xxl:inline bg-white text-lg font-bold rounded-full py-2 px-20  text-black text-center" >
+        <Link href='modal/compose/publish' className="hidden xxl:inline bg-white text-lg font-bold rounded-full py-2 px-20  text-black text-center" >
           Post</Link>
         </div>
         

@@ -13,7 +13,7 @@ export default function PostMedia({
   );
 
   return (
-    <div className="rounded-md border border-borderGray overflow-hidden font-bold text-lg  relative">
+    <div className="rounded-lg border border-borderGray overflow-hidden font-bold text-lg  relative">
       <ImageKitMedia
         type={fileDetails.mime.startsWith('video')?'video':'image'}
         src={fileDetails.url}

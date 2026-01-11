@@ -196,7 +196,7 @@ export default function Publish() {
               height={20}
             />
           </div>
-
+             {/* save and publish */}
           <button
             type="submit"
             disabled={!text.trim() && media.length === 0}

@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useReducer } from "react";
 import { MediaFile, Settings } from "@/types";
 
 const DEFAULT_SETTINGS: Settings = {
@@ -34,7 +34,7 @@ function mediaEditorReducer(
         file,
         url: URL.createObjectURL(file), // ⚠️ allowed ONLY if you accept minimal impurity
         settings: { ...DEFAULT_SETTINGS },
-        type: file.type.includes('video')?'video':'image'
+        type: file.type.includes("video") ? "video" : "image",
       }));
 
       return {
@@ -89,7 +89,6 @@ export function useMediaEditor(maxFiles: number = 4) {
   ---------------------------------- */
   function addMedia(files: FileList | null) {
     if (!files) return;
-
     dispatch({
       type: "ADD_MEDIA",
       payload: { files, maxFiles },
