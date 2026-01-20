@@ -25,7 +25,7 @@ export default function PublishMedia({
   );
 
   return (
-    <div className="relative w-full h-[300px] md:h-[360px] rounded-lg overflow-hidden border border-gray-900">
+    <div className="relative w-full h-[300px] md:h-[250px] rounded-lg overflow-hidden border border-gray-900">
       {count === 1 && renderMedia(media[0])}
 
       {count === 2 && (

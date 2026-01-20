@@ -33,8 +33,8 @@ const PopularTags = () => {
         </div>
       </div>
       {/* TOPICS */}
-      {trends.map((trend) => (
-        <div key={trend.title} className="">
+      {trends.map((trend ,i) => (
+        <div key={i} className="">
           <div className="flex items-center justify-between">
             <span className="text-textGray text-sm">{trend.category}</span>
             <div className="p-2 rounded-full flex items-center  hover:bg-iconBlue/20">

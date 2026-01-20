@@ -12,10 +12,16 @@ import EmojiPicker, {
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
-export default function Publish() {
+
+interface PublishProps {
+  id?: string;
+  onStateChange?: (hasContent: boolean) => void;
+}
+
+export default function Publish({ id = "default", onStateChange }: PublishProps) {
+  const inputId = `image-input-${id}`;
   const [text, setText] = useState("");
   const [openPicker, setOpenPicker] = useState(false);
-
   const {
     media,
     editingMedia,
@@ -26,9 +32,15 @@ export default function Publish() {
     closeEditor,
     reset,
   } = useMediaEditor(4);
+  
   //console.log(media)
   const MAX_CHARS = 280;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    onStateChange?.(text.trim().length > 0 || media.length > 0);
+  }, [text, media, onStateChange]);
+
   useEffect(() => {
     const textarea = textareaRef.current;
     if (!textarea) return;
@@ -44,8 +56,8 @@ export default function Publish() {
       formData.append("media", m.file); // send all selected files
     });
 
-    const fileDetials = await sharePost(formData, media); // Server Action
-    console.log(fileDetials);
+    const fileDetails = await sharePost(formData, media); // Server Action
+    // console.log(fileDetails); // Remove in production
     setText(""); // reset states
     reset();
   };
@@ -96,20 +108,20 @@ export default function Publish() {
         )}
 
         <hr className="border-borderGray" />
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-3">
           <div className="flex gap-4 items-center">
             {media.length != 4 && (
               <input
                 hidden
                 type="file"
                 accept="image/*,video/*"
-                id="image-input"
+                id={inputId}
                 multiple // to make the browser send multiple files
                 onChange={(e) => addMedia(e.target.files)}
               />
             )}
             <label
-              htmlFor="image-input"
+              htmlFor={inputId}
               className={`${
                 media.length === 4 ? "opacity-40 pointer-events-none" : ""
               } p-2 text-center rounded-full hover:bg-blue-500/20 `}
@@ -158,7 +170,7 @@ export default function Publish() {
 
               {/* Picker */}
               <div
-              className={`absolute top-full left-[50%] translate-x-[-50%] mb-2 z-20 ${
+              className={`absolute top-full left-1/2 translate-x-[-50%] mb-2 z-20 ${
                   openPicker ? "block" : "hidden"
                 }`}
               >

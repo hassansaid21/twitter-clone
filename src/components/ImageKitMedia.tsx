@@ -56,7 +56,6 @@ const ImageKitMedia = (props: ImageKitMediaProps) => {
     return (
       <Image
         urlEndpoint={urlEndpoint}
-        transformation={transformation ?? [{ width: 600 ,height:600 }]}
         {...imageProps}
       />
     );

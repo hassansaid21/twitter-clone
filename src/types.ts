@@ -43,5 +43,5 @@ export interface FileDetails {
   url : string ;
   fileType :  string ;
   customMetadata ?: {sensitive : boolean}
-  mime:'string'
+  mime: string;
 }

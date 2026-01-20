@@ -90,7 +90,7 @@ export default function LeftBar() {
         <Link className="bg-white rounded-full  p-2  xxl:hidden  " href='/'>
         <ImageKitMedia type='image' src='icons/post.svg' alt="post-icon" width={24} height={24}/>
         </Link>
-        <Link href='modal/compose/publish' className="hidden xxl:inline bg-white text-lg font-bold rounded-full py-2 px-20  text-black text-center" >
+        <Link href='/compose/publish/' className="hidden xxl:inline bg-white text-lg font-bold rounded-full py-2 px-20  text-black text-center" >
           Post</Link>
         </div>
         
@@ -100,10 +100,12 @@ export default function LeftBar() {
               <div className="relative w-10 h-10 rounded-full overflow-hidden ">
                 <ImageKitMedia type='image' src='/general/me.png' alt="user-logo" fill/>
               </div>
+                <Link href='/users/hasssan'>
               <div className="hidden xxl:flex flex-col   text-sm ">
                 <span className="font-bold">Hassan Said</span>
                 <span className="text-textGray">@hassansaid21</span>
               </div>
+                   </Link>
              </div>
               <div className="text-2xl  hidden xxl:block " aria-hidden="true">...</div>
      </div>

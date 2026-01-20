@@ -1,5 +1,6 @@
 import Feed from "@/components/Feed";
 import ImageKitMedia from "@/components/ImageKitMedia";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Page() {
@@ -24,7 +25,7 @@ export default function Page() {
       <div className="relative w-full ">
         <div className=" w-full relative aspect-[3/1] ">
           <ImageKitMedia
-            type="image"
+          type="image"
             src="general/cover.jpg"
             alt="background image"
             fill
@@ -103,5 +104,7 @@ export default function Page() {
       </div>
       <Feed />
     </div>
+    
+  
   );
 }
