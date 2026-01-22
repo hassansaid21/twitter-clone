@@ -1,6 +1,5 @@
-import Feed from "@/components/Feed";
 import ImageKitMedia from "@/components/ImageKitMedia";
-import Image from "next/image";
+import ProfileTabs from "@/components/ProfileTabs";
 import Link from "next/link";
 
 export default function Page() {
@@ -102,7 +101,7 @@ export default function Page() {
           </span>
         </div>
       </div>
-      <Feed />
+      <ProfileTabs />
     </div>
     
   

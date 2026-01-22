@@ -1,19 +1,23 @@
 "use client";
+
+import Drafts from "@/components/Drafts";
 import Publish from "@/components/Publish";
 import { useRouter } from "next/navigation";
 import { useState, useCallback, useRef } from "react";
 import { useDrafts } from "@/hooks/useDrafts";
 import { MediaFile } from "@/types";
 
-export default function PublishModal() {
+export default function DraftsPage() {
   const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
   const [hasContent, setHasContent] = useState(false);
-  const { saveDraft } = useDrafts();
+  const { drafts, saveDraft, deleteDrafts, loadDraftForEditing } = useDrafts();
   
-  // Refs to get current content from Publish
   const currentTextRef = useRef("");
   const currentMediaRef = useRef<MediaFile[]>([]);
+  
+  const [initialData, setInitialData] = useState<{ text: string; media: MediaFile[] } | null>(null);
+  const [showPublish, setShowPublish] = useState(false);
 
   const handleStateChange = useCallback((hasContent: boolean, text: string, media: MediaFile[]) => {
     setHasContent(hasContent);
@@ -40,16 +44,44 @@ export default function PublishModal() {
     router.back();
   };
 
-  const handleDrafts = () => {
-    if (hasContent) {
-      // If there's content, show save confirmation modal
-      setShowConfirm(true);
-    } else {
-      // If no content, go to drafts to select from existing
-      router.push("/compose/publish/unsent/drafts");
+  const handleCloseDrafts = () => {
+    router.back();
+  };
+
+  const handleDeleteDrafts = (ids: string[]) => {
+    deleteDrafts(ids);
+  };
+
+  const handleSelectDraft = async (id: string) => {
+    const draftData = await loadDraftForEditing(id);
+    if (draftData) {
+      setInitialData(draftData);
+      setShowPublish(true);
     }
   };
 
+  const handleBackToDrafts = () => {
+    if (hasContent) {
+      setShowConfirm(true);
+    } else {
+      setShowPublish(false);
+      setInitialData(null);
+    }
+  };
+
+  // Show drafts list initially
+  if (!showPublish) {
+    return (
+      <Drafts
+        drafts={drafts}
+        onClose={handleCloseDrafts}
+        onDeleteDrafts={handleDeleteDrafts}
+        onSelectDraft={handleSelectDraft}
+      />
+    );
+  }
+
+  // Show publish with loaded draft
   return (
     <div
       className="fixed inset-0 z-50 flex justify-center items-start overflow-auto bg-white/50"
@@ -67,15 +99,18 @@ export default function PublishModal() {
             ✕
           </button>
           <span
-            onClick={handleDrafts}
+            onClick={handleBackToDrafts}
             className="text-iconBlue font-bold cursor-pointer hover:bg-iconBlue/20 px-4 py-2 rounded-full"
           >
             Drafts
           </span>
         </div>
         <Publish
-          id="modal"
+          key={initialData ? "draft" : "default"}
+          id="drafts-modal"
           onStateChange={handleStateChange}
+          initialText={initialData?.text}
+          initialMedia={initialData?.media}
         />
       </div>
 

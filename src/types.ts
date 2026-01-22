@@ -45,3 +45,19 @@ export interface FileDetails {
   customMetadata ?: {sensitive : boolean}
   mime: string;
 }
+
+export interface DraftMedia {
+  id: string;
+  dataUrl: string;
+  type: 'video' | 'image';
+  settings: Settings;
+  fileName: string;
+  mimeType: string;
+}
+
+export interface Draft {
+  id: string;
+  text: string;
+  media: DraftMedia[];
+  createdAt: number;
+}

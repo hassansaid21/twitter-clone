@@ -7,20 +7,29 @@ import { sharePost } from "@/actions";
 import MediaEditor from "./MediaEditor";
 import { useMediaEditor } from "@/hooks/useMediaEditor";
 import PublishMedia from "./PublishMedia";
+import CharacterCounter from "./CharacterCounter";
 import EmojiPicker, {
   EmojiClickData,
   EmojiStyle,
   Theme,
 } from "emoji-picker-react";
+import { MediaFile } from "@/types";
 
 interface PublishProps {
   id?: string;
-  onStateChange?: (hasContent: boolean) => void;
+  onStateChange?: (_hasContent: boolean, _text: string, _media: MediaFile[]) => void;
+  initialText?: string;
+  initialMedia?: MediaFile[];
 }
 
-export default function Publish({ id = "default", onStateChange }: PublishProps) {
+export default function Publish({
+  id = "default",
+  onStateChange,
+  initialText = "",
+  initialMedia = [],
+}: PublishProps) {
   const inputId = `image-input-${id}`;
-  const [text, setText] = useState("");
+  const [text, setText] = useState(initialText);
   const [openPicker, setOpenPicker] = useState(false);
   const {
     media,
@@ -31,14 +40,23 @@ export default function Publish({ id = "default", onStateChange }: PublishProps)
     updateMediaSettings,
     closeEditor,
     reset,
+    setInitialMedia,
   } = useMediaEditor(4);
+
+  // Set initial media on mount if provided
+  useEffect(() => {
+    if (initialMedia && initialMedia.length > 0) {
+      setInitialMedia(initialMedia);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   //console.log(media)
   const MAX_CHARS = 280;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    onStateChange?.(text.trim().length > 0 || media.length > 0);
+    onStateChange?.(text.trim().length > 0 || media.length > 0, text, media);
   }, [text, media, onStateChange]);
 
   useEffect(() => {
@@ -208,15 +226,24 @@ export default function Publish({ id = "default", onStateChange }: PublishProps)
               height={20}
             />
           </div>
-             {/* save and publish */}
+
+          <div className=" flex items-center  gap-4">
+
+             {/* Character counter */}
+          {text.length > 0 && (
+            <CharacterCounter current={text.length} max={MAX_CHARS} />
+          )}
+          {/* save and publish */}
+          
           <button
             type="submit"
             disabled={!text.trim() && media.length === 0}
             className="bg-white rounded-full font-bold text-black py-2 px-4 disabled:opacity-50
-                    disabled:cursor-not-allowed"
-          >
+            disabled:cursor-not-allowed"
+            >
             Post
           </button>
+            </div>
         </div>
       </div>
     </form>

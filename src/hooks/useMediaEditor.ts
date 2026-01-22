@@ -19,7 +19,8 @@ type MediaEditorAction =
       payload: { id: string; settings: Partial<Settings> };
     }
   | { type: "CLOSE_EDITOR" }
-  | { type: "RESET" };
+  | { type: "RESET" }
+  | { type: "SET_INITIAL_MEDIA"; payload: { media: MediaFile[] } };
 
 function mediaEditorReducer(
   state: MediaEditorState,
@@ -72,6 +73,9 @@ function mediaEditorReducer(
 
     case "RESET":
       return { media: [], editingMedia: null };
+
+    case "SET_INITIAL_MEDIA":
+      return { ...state, media: action.payload.media };
 
     default:
       return state;
@@ -140,6 +144,13 @@ export function useMediaEditor(maxFiles: number = 4) {
     dispatch({ type: "RESET" });
   }
 
+  /* ---------------------------------
+     SET INITIAL MEDIA
+  ---------------------------------- */
+  function setInitialMedia(media: MediaFile[]) {
+    dispatch({ type: "SET_INITIAL_MEDIA", payload: { media } });
+  }
+
   return {
     media: state.media,
     editingMedia: state.editingMedia,
@@ -149,5 +160,6 @@ export function useMediaEditor(maxFiles: number = 4) {
     updateMediaSettings,
     closeEditor,
     reset,
+    setInitialMedia,
   };
 }
