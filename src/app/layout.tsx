@@ -4,8 +4,14 @@ import RightBar from "../components/RightBar";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "X - Social Media",
+  title: {
+    template: "%s / X",
+    default: "X",
+  },
   description: "A social media platform to share your thoughts",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({

@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Feed from "../components/Feed";
 import Link from "next/link";
 import Publish from "../components/Publish";
+
+export const metadata: Metadata = {
+  title: "Home",
+};
 
 const Homepage = () => {
   return (

@@ -100,7 +100,7 @@ export default function LeftBar() {
               <div className="relative w-10 h-10 rounded-full overflow-hidden ">
                 <ImageKitMedia type='image' src='/general/me.png' alt="user-logo" fill/>
               </div>
-                <Link href='/users/hasssan'>
+                <Link href='/users/hasssansaid'>
               <div className="hidden xxl:flex flex-col   text-sm ">
                 <span className="font-bold">Hassan Said</span>
                 <span className="text-textGray">@hassansaid21</span>

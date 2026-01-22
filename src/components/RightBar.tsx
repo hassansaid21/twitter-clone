@@ -12,7 +12,7 @@ const RightBar = () => {
        </div>
       <PopularTags />
       <Recommendations />
-      <div className="text-textGray text-sm flex gap-x-4 flex-wrap">
+      <div className="text-textGray text-sm flex gap-x-4 flex-wrap mb-2">
         <Link href="/">Terms of Service</Link>
         <Link href="/">Privacy Policy</Link>
         <Link href="/">Cookie Policy</Link>

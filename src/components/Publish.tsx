@@ -20,6 +20,7 @@ interface PublishProps {
   onStateChange?: (_hasContent: boolean, _text: string, _media: MediaFile[]) => void;
   initialText?: string;
   initialMedia?: MediaFile[];
+  textPlaceholder?: string
 }
 
 export default function Publish({
@@ -27,6 +28,7 @@ export default function Publish({
   onStateChange,
   initialText = "",
   initialMedia = [],
+  textPlaceholder
 }: PublishProps) {
   const inputId = `image-input-${id}`;
   const [text, setText] = useState(initialText);
@@ -86,7 +88,7 @@ export default function Publish({
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-b-[1px] border-borderGray flex p-4 gap-4"
+      className=" flex p-4 gap-4"
     >
       <Avatar />
 
@@ -96,7 +98,7 @@ export default function Publish({
           rows={1}
           maxLength={MAX_CHARS}
           onChange={(e) => setText(e.target.value)}
-          placeholder="What is happening?!"
+          placeholder= { textPlaceholder||"What is happening?!" }
           ref={textareaRef}
           className="
               bg-transparent
@@ -125,7 +127,7 @@ export default function Publish({
           />
         )}
 
-        <hr className="border-borderGray" />
+        
         <div className="flex justify-between gap-3">
           <div className="flex gap-4 items-center">
             {media.length != 4 && (
