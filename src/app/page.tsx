@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Feed from "../components/Feed";
 import Link from "next/link";
 import Publish from "../components/Publish";
-
+import prisma from '../prisma.ts'
+// 
 export const metadata: Metadata = {
   title: "Home",
 };
 
 const Homepage = () => {
+
   return (
     <div className="flex flex-col ">
       <div className=" flex  text-textGray border-borderGray border-b-[1px] font-bold text-center">
